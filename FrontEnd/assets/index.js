@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 function init() {
     loadWorks();
     initEditMode();
+    initEvents();
 }
 
  function loadWorks() {
@@ -95,14 +96,29 @@ function setFilter(filterId) {
 }
 
 function initEditMode() {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token") ?? null;
+    const token = sessionStorage.getItem("token") ?? null;
 
     if (token != null) {
-        document.querySelector("#edition-banner").setAttribute("style", "display: flex");
-        document.querySelector("body").setAttribute("style", "padding-top: 60px")
+        const shown = ["#edition-banner", "#logout-btn", "#portfolio-modify"];
+        const hidden = ["#login-btn"];
+        
+        const body = document.querySelector("body");
+        if (body) body.style["padding-top"] = "60px";
 
-        document.querySelector("#login-btn").setAttribute("style", "display: none");
-        document.querySelector("#logout-btn").setAttribute("style", "display: flex");
+        shown.forEach(element => {
+            document.querySelector(element)?.classList.remove("hidden");
+        });
+
+        hidden.forEach(element => {
+            document.querySelector(element)?.classList.add("hidden");
+        });
     }
+}
+
+function initEvents() {
+    const logoutBtn = document.querySelector("#logout-btn");
+    logoutBtn?.addEventListener("click", function (e) {
+        sessionStorage.removeItem("token");
+        window.location.reload();
+    });
 }

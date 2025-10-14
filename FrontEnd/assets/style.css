@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+* {
+	scroll-behavior: smooth;
+}
+
 :root {
 	--main-color: #1D6154;
 }
@@ -73,6 +77,39 @@ table {
 }
 /** end reset css**/
 
+.hidden {
+	display: none !important;
+}
+
+input:not(input[type="submit"]),
+textarea {
+	width: calc(100% - 40px);
+	padding-left: 20px;
+	padding-right: 20px;
+	border: none;
+	box-shadow: 0px 4px 14px 0px #00000017;
+	font-size: 1.2em;
+}
+
+label {
+	width: 100%;
+}
+
+input:not(input[type="submit"]) {
+	height: 50px;
+}
+
+input[type="submit"] {
+	width: 180px;
+	margin-top: 10px;
+	height: 36px;
+	background: var(--main-color);
+	border: 0;
+	border-radius: 100px;
+	color: white;
+	cursor: pointer;
+}
+
 body {
 	max-width: 1140px;
 	font-family: 'Work Sans' ;
@@ -81,7 +118,7 @@ body {
 }
 
 #edition-banner {
-	display: none;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 12px;
@@ -248,10 +285,6 @@ li:not(.current):hover {
 	margin-bottom: 1em;
 }
 
-.hidden {
-	display: none;
-}
-
 .gallery {
 	width: 100%;
 	display: grid;
@@ -266,13 +299,11 @@ li:not(.current):hover {
 }
 
 #contact {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
 	width: 50%;
 	margin: auto;
-}
-
-#contact > * {
-	text-align: center;
-
 }
 
 #contact h2{
@@ -280,26 +311,21 @@ li:not(.current):hover {
 }
 
 #contact form {
-	text-align: left;
-	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	text-align: left;
+	margin-top:30px;
+	width: 380px;
 }
 
-#contact input {
-	height: 50px;
-	font-size: 1.2em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+#contact form input:not(input[type="submit"]),
+#contact form textarea {
+	margin-bottom: 20px;
 }
 
 #contact label {
 	margin: 2em 0 1em 0;
-}
-
-#contact textarea {
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
 footer nav ul {
@@ -337,29 +363,12 @@ footer nav ul {
 }
 
 #login-form label {
-	width: 100%;
 	text-align: left;
 	margin-bottom: 10px;
 }
 
-#login-form .text-input {
-	width: calc(100% - 40px);
-	height: 50px;
+#login-form input:not(input[type="submit"]) {
 	margin-bottom: 40px;
-	padding-left: 20px;
-	padding-right: 20px;
-	border: 0;
-	box-shadow: 0px 4px 14px 0px #00000017;
-}
-
-#login-form #connect-btn {
-	margin-top: 10px;
-	width: 180px;
-	height: 36px;
-	background: var(--main-color);
-	border: 0;
-	border-radius: 100px;
-	color: white;
 }
 
 #login-form label,
