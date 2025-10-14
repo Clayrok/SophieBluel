@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+:root {
+	--main-color: #1D6154;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,6 +28,17 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
+html {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+}
+
+html > * {
+	width: 100%;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -31,7 +46,11 @@ footer, header, hgroup, menu, nav, section {
 }
 
 body {
+	display: flex;
+    flex-direction: column;
+    align-items: stretch;
 	line-height: 1;
+	flex: 1;
 }
 
 ol, ul {
@@ -56,9 +75,29 @@ table {
 
 body {
 	max-width: 1140px;
-	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background: #FFFEF8;
+}
+
+#edition-banner {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	background: black;
+	color: white;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+#edition-banner > i {
+	font-weight: 400;
 }
 
 header {
@@ -90,7 +129,12 @@ h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: var(--main-color);
+}
+
+nav a {
+	text-decoration: none;
+	color: #3D3D3D;
 }
 
 nav ul {
@@ -105,13 +149,22 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
+nav li.current {
+	font-weight: 600;
+}
+
+li:not(.current) {
+	cursor: pointer;
+}
+
+li:not(.current):hover {
 	color: #B1663C;
 }
 
 #introduction {
 	display: flex;
 	align-items: center;
+	margin-bottom: 120px;
 }
 
 #introduction figure {
@@ -150,13 +203,13 @@ li:hover {
 	align-items: center;
 	height: 37px;
 	border-radius: 100px;
-	border: solid 2px #1D6154;
+	border: solid 2px var(--main-color);
 	padding-left: 20px;
 	padding-right: 20px;
 	font-family: 'Syne';
     font-weight: 700;
     font-size: 16px;
-    color: #1D6154;
+    color: var(--main-color);
 	background: none;
 }
 
@@ -168,15 +221,34 @@ li:hover {
 #filters .filter-button.active {
 	color: white;
 	border-color: white;
-	background: #1D6154;
+	background: var(--main-color);
+}
+
+#portfolio {
+	display: flex;
+	flex-direction: column;
+	align-items: center
+}
+
+#portfolio-title-container {
+	position: relative;
+}
+
+#portfolio-title-container #portfolio-modify {
+	position: absolute;
+    right: -110px;
+    top: 8px;
+	color: #3D3D3D;
+	cursor: pointer;
 }
 
 #portfolio h2 {
+	width: fit-content;
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-#portfolio .work.hidden {
+.hidden {
 	display: none;
 }
 
@@ -230,19 +302,74 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	margin : 2em auto ;
-	width: 180px;
-	text-align: center;
-	border-radius: 60px ;
-}
-
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+
+
+/***** Login *****/
+#login {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	padding-top: 80px;
+}
+
+#login-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 380px;
+}
+
+#login-form .title {
+	color: var(--main-color);
+	margin-bottom: 50px;
+	font-weight: 700;
+	font-size: 30px;
+}
+
+#login-form label {
+	width: 100%;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+#login-form .text-input {
+	width: calc(100% - 40px);
+	height: 50px;
+	margin-bottom: 40px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border: 0;
+	box-shadow: 0px 4px 14px 0px #00000017;
+}
+
+#login-form #connect-btn {
+	margin-top: 10px;
+	width: 180px;
+	height: 36px;
+	background: var(--main-color);
+	border: 0;
+	border-radius: 100px;
+	color: white;
+}
+
+#login-form label,
+#login-form #password-reset {
+	font-family: "Work Sans";
+	color: #3D3D3D;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+#login-form #password-reset {
+	margin-top: 30px;
 }

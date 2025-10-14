@@ -17,16 +17,36 @@
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
-					<li>projets</li>
+					<a href="index.html"><li>projets</li></a>
 					<li>contact</li>
-					<li>login</li>
+					<li class="current">login</li>
 					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 				</ul>
 			</nav>
 		</header>
 
-		<main>
+		<main id="login">
+            <form id="login-form">
+                <h1 class="title">Login</h1>
 
+                <label for="email">E-mail</label>
+                <input type="email" name="email" class="text-input" autocomplete="email">
+
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" class="text-input">
+
+                <input type="submit" value="Se connecter" id="connect-btn">
+
+                <a href="#" id="password-reset">Mot de passe oublié</a>
+            </form>
         </main>
+
+		<footer>
+			<nav>
+				<ul>
+					<li>Mentions Légales</li>
+				</ul>
+			</nav>
+		</footer>
     </body>
 </html>

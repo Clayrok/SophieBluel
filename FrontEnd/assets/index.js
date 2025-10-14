@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 function init() {
     loadWorks();
+    initEditMode();
 }
 
  function loadWorks() {
@@ -91,4 +92,17 @@ function setFilter(filterId) {
             }
         }
     });
+}
+
+function initEditMode() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token") ?? null;
+
+    if (token != null) {
+        document.querySelector("#edition-banner").setAttribute("style", "display: flex");
+        document.querySelector("body").setAttribute("style", "padding-top: 60px")
+
+        document.querySelector("#login-btn").setAttribute("style", "display: none");
+        document.querySelector("#logout-btn").setAttribute("style", "display: flex");
+    }
 }
