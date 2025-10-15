@@ -81,6 +81,14 @@ table {
 	display: none !important;
 }
 
+.pointer {
+	cursor: pointer !important;
+}
+
+.spacer {
+	flex: 1;
+}
+
 input:not(input[type="submit"]),
 textarea {
 	width: calc(100% - 40px);
@@ -107,7 +115,6 @@ input[type="submit"] {
 	border: 0;
 	border-radius: 100px;
 	color: white;
-	cursor: pointer;
 }
 
 body {
@@ -135,6 +142,108 @@ body {
 
 #edition-banner > i {
 	font-weight: 400;
+}
+
+#add-work-window,
+#add-work-window #overlay {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+}
+
+#add-work-window #overlay {
+	background: rgba(0, 0, 0, 0.3);
+}
+
+#add-work-window #gallery-page {
+	--hpadding: 75px;
+	--vpadding: 50px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 35px;
+	position: relative;
+	width: calc(630px - calc(var(--hpadding) * 2));
+    height: calc(688px - calc(var(--vpadding) * 2));
+	padding-left: var(--hpadding);
+	padding-right: var(--hpadding);
+	padding-top: var(--vpadding);
+	padding-bottom: var(--vpadding);
+	border-radius: 10px;
+	background: white;
+	z-index: 100;
+}
+
+#add-work-window .close-btn {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	font-size: 1.5rem;
+}
+
+#add-work-window h1 {
+	font-family: "Work Sans";
+	font-size: 26px;
+	color: black;
+}
+
+#add-work-window #gallery {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 10px;
+	flex: 1;
+	max-height: 420px;
+	overflow-y: auto;
+}
+
+#add-work-window .spacer {
+	border-bottom: solid 1px #B3B3B3;
+	width: 100%;
+}
+
+#add-work-window .work-edit-thumb {
+	position: relative;
+}
+
+#add-work-window .work-edit-thumb img {
+	width: 100%;
+	height: 100%;
+}
+
+#add-work-window .work-edit-thumb-del {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 17px;
+	height: 17px;
+	border: 0;
+	background: black;
+	color: white;
+	font-size: 0.6rem;
+	border-radius: 2px;
+}
+
+#add-work-window #add-work-btn {
+	width: 238px;
+	height: 36px;
+	border-radius: 100px;
+	background: var(--main-color);
+	border: 0;
+	color: white;
+	font-family: "Syne";
+	font-size: 14px;
+	font-weight: 700;
 }
 
 header {
@@ -276,7 +385,6 @@ li:not(.current):hover {
     right: -110px;
     top: 8px;
 	color: #3D3D3D;
-	cursor: pointer;
 }
 
 #portfolio h2 {

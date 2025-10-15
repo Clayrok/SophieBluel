@@ -20,26 +20,47 @@ function init() {
                 resetCategories();
 
                 works.forEach(work => {
-                    const newWork = document.createElement("figure");
-                    newWork.classList.add("work");
-                    newWork.dataset.categoryId = work.category.id;
-
-                    const img = document.createElement("img");
-                    img.src = work.imageUrl;
-                    img.alt = work.title;
-                    newWork.appendChild(img);
-
-                    const caption = document.createElement("figcaption");
-                    caption.innerText = work.title;
-                    newWork.appendChild(caption);
-
-                    gallery.appendChild(newWork);
-
+                    addPortfolioWork(gallery, work);
+                    addEditWindowWork(work);
                     addCategory(work.category);
                 });
             });
         }
     });
+}
+
+function addPortfolioWork(gallery, work) {
+    const newWork = document.createElement("figure");
+    newWork.classList.add("work");
+    newWork.dataset.categoryId = work.category.id;
+
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+    newWork.appendChild(img);
+
+    const caption = document.createElement("figcaption");
+    caption.innerText = work.title;
+    newWork.appendChild(caption);
+
+    gallery.appendChild(newWork);
+}
+
+function addEditWindowWork(work) {
+    const workThumbnail = document.createElement("div");
+    workThumbnail.classList.add("work-edit-thumb");
+
+    const workImg = document.createElement("img");
+    workImg.src = work.imageUrl;
+    workThumbnail.appendChild(workImg);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
+    deleteBtn.classList.add("work-edit-thumb-del");
+    deleteBtn.classList.add("pointer");
+    workThumbnail.appendChild(deleteBtn);
+
+    document.querySelector("#add-work-window #gallery")?.appendChild(workThumbnail);
 }
 
 function resetCategories() {
@@ -119,6 +140,18 @@ function initEvents() {
     const logoutBtn = document.querySelector("#logout-btn");
     logoutBtn?.addEventListener("click", function (e) {
         sessionStorage.removeItem("token");
-        window.location.reload();
+        window.location = "index.html";
+    });
+
+    const worksEditOpenBtn = document.querySelector("#portfolio-modify");
+    worksEditOpenBtn?.addEventListener("click", function (e) {
+        const worksEditWindow = document.querySelector("#add-work-window");
+        if (worksEditWindow) worksEditWindow.classList.remove("hidden");
+    });
+
+    const worksEditCloseBtn = document.querySelector("#add-work-window .close-btn");
+    worksEditCloseBtn?.addEventListener("click", function (e) {
+        const worksEditWindow = document.querySelector("#add-work-window");
+        if (worksEditWindow) worksEditWindow.classList.add("hidden");
     });
 }
