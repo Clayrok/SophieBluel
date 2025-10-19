@@ -578,6 +578,15 @@ footer nav ul {
 	margin-bottom: 10px;
 }
 
+#login-form #credentials-error {
+	background: #ffefef;
+	padding: 5px;
+	border-radius: 5px;
+	border: solid 1px #ffdede;
+	color: #3D3D3D;
+	margin-bottom: 30px;
+}
+
 #login-form input:not(input[type="submit"]) {
 	margin-bottom: 40px;
 }

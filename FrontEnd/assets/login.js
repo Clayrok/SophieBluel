@@ -17,7 +17,13 @@ function init() {
 
         if (emailValue.length > 0 && passwordValue.length > 0) {
             retrieveToken(emailValue, passwordValue).then(token => {
-                window.location = "index.html";
+                if (token) {
+                    window.location = "index.html";
+                }
+                else {
+                    const credentialsError = document.querySelector("#login-form #credentials-error");
+                    if (credentialsError) credentialsError.classList.remove("hidden");
+                }
             });
         }
     });
