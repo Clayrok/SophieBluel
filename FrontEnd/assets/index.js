@@ -1,37 +1,39 @@
-let categories = [];
+import { getToken, resetToken, getCategories, getWorks } from "./api.js"
+import { GalleryModal, UploadModal, openModal, closeModal, closeAllModals } from "./modals.js";
 
-document.addEventListener("DOMContentLoaded", function (e) {
-    init();
-});
-
-function init() {
+document.addEventListener("DOMContentLoaded", async function (e) {
+    await getToken();
+    loadCategories();
     loadWorks();
     initEditMode();
     initEvents();
+});
+
+async function loadCategories() {
+    resetCategoryFilters();
+    getCategories().then(categories => {
+        categories.unshift({ id: 0, name: "Tous" });
+        categories.forEach((category, index) => {
+            addCategoryFilter(category, index === 0);
+        });
+    });
 }
 
- function loadWorks() {
-    fetch("http://localhost:5678/api/works").then((response) => {
-        if (response) {
-            response.json().then((works) => {
-                const gallery = document.querySelector(".gallery");
-                gallery.innerHTML = '';
+export function loadWorks() {
+    getWorks().then(works => {
+        const gallery = document.querySelector("#portfolio .gallery");
+        gallery.innerHTML = '';
 
-                resetCategories();
-
-                works.forEach(work => {
-                    addPortfolioWork(gallery, work);
-                    addEditWindowWork(work);
-                    addCategory(work.category);
-                });
-            });
-        }
+        works.forEach(work => {
+            addPortfolioWork(gallery, work);
+        });
     });
 }
 
 function addPortfolioWork(gallery, work) {
     const newWork = document.createElement("figure");
     newWork.classList.add("work");
+    newWork.dataset.workId = work.id;
     newWork.dataset.categoryId = work.category.id;
 
     const img = document.createElement("img");
@@ -46,50 +48,25 @@ function addPortfolioWork(gallery, work) {
     gallery.appendChild(newWork);
 }
 
-function addEditWindowWork(work) {
-    const workThumbnail = document.createElement("div");
-    workThumbnail.classList.add("work-edit-thumb");
-
-    const workImg = document.createElement("img");
-    workImg.src = work.imageUrl;
-    workThumbnail.appendChild(workImg);
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
-    deleteBtn.classList.add("work-edit-thumb-del");
-    deleteBtn.classList.add("pointer");
-    workThumbnail.appendChild(deleteBtn);
-
-    document.querySelector("#add-work-window #gallery")?.appendChild(workThumbnail);
-}
-
-function resetCategories() {
+function addCategoryFilter(category, active = false) {
     const filters = document.querySelector("#filters");
 
-    categories = [];
+    const newBtn = document.createElement("button");
+    newBtn.innerText = category.name;
+    newBtn.classList.add("filter-button");
+    if (active) newBtn.classList.add("active");
+    newBtn.dataset.filterId = category.id;
+
+    newBtn.addEventListener("click", function (e) {
+        setFilter(this.dataset.filterId);
+    });
+
+    filters.appendChild(newBtn);
+}
+
+function resetCategoryFilters() {
+    const filters = document.querySelector("#filters");
     filters.innerHTML = "";
-
-    addCategory({ id: 0, name: "Tous" }, true);
-}
-
-function addCategory(category, active = false) {
-    const filters = document.querySelector("#filters");
-
-    if (!categories.some(el => el.id === category.id && el.name === category.name)) {
-        categories.push(category);
-
-        const newBtn = document.createElement("button");
-        newBtn.innerText = category.name;
-        newBtn.classList.add("filter-button");
-        if (active) newBtn.classList.add("active");
-        newBtn.dataset.filterId = category.id;
-
-        newBtn.addEventListener("click", function (e) {
-            setFilter(this.dataset.filterId);
-        });
-
-        filters.appendChild(newBtn);
-    }
 }
 
 function setFilter(filterId) {
@@ -117,9 +94,7 @@ function setFilter(filterId) {
 }
 
 function initEditMode() {
-    const token = sessionStorage.getItem("token") ?? null;
-
-    if (token != null) {
+    if (getToken() != null) {
         const shown = ["#edition-banner", "#logout-btn", "#portfolio-modify"];
         const hidden = ["#login-btn"];
         
@@ -139,19 +114,13 @@ function initEditMode() {
 function initEvents() {
     const logoutBtn = document.querySelector("#logout-btn");
     logoutBtn?.addEventListener("click", function (e) {
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("token");
+        resetToken();
         window.location = "index.html";
     });
 
     const worksEditOpenBtn = document.querySelector("#portfolio-modify");
     worksEditOpenBtn?.addEventListener("click", function (e) {
-        const worksEditWindow = document.querySelector("#add-work-window");
-        if (worksEditWindow) worksEditWindow.classList.remove("hidden");
-    });
-
-    const worksEditCloseBtn = document.querySelector("#add-work-window .close-btn");
-    worksEditCloseBtn?.addEventListener("click", function (e) {
-        const worksEditWindow = document.querySelector("#add-work-window");
-        if (worksEditWindow) worksEditWindow.classList.add("hidden");
+        openModal(GalleryModal);
     });
 }

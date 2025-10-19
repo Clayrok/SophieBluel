@@ -1,3 +1,5 @@
+import { retrieveToken } from "./api.js";
+
 document.addEventListener("DOMContentLoaded", function (e) {
     init();
 });
@@ -14,22 +16,8 @@ function init() {
         const passwordValue = password?.value.trim() || "";
 
         if (emailValue.length > 0 && passwordValue.length > 0) {
-            fetch("http://localhost:5678/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: emailValue,
-                    password: passwordValue
-                })
-            }).then((response) => {
-                if (response.ok) {
-                    response.json().then((parsedJson) => {
-                        sessionStorage.setItem("token", parsedJson.token);
-                        window.location = "index.html";
-                    });
-                }
+            retrieveToken(emailValue, passwordValue).then(token => {
+                window.location = "index.html";
             });
         }
     });

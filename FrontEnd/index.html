@@ -12,17 +12,46 @@
 			crossorigin="anonymous" referrerpolicy="no-referrer">
 		<meta name="description" content="">
 		<link rel="stylesheet" href="./assets/style.css">
-		<script type="text/javascript" src="./assets/index.js"></script>
+		<script type="module" src="./assets/index.js"></script>
 	</head>
 
-	<div id="add-work-window" class="hidden">
-		<div id="overlay"></div>
-		<div id="gallery-page">
-			<i class="fa-solid fa-xmark close-btn pointer"></i>
+	<div id="modal-container" class="hidden">
+		<div id="gallery" class="modal hidden">
 			<h1>Galerie photo</h1>
-			<div id="gallery"></div>
-			<div class="spacer"></div>
-			<button id="add-work-btn" class="pointer">Ajouter une photo</button>
+			<div class="content">
+				<div class="gallery"></div>
+			</div>
+			<div class="separator"></div>
+			<button id="add-work-btn" class="modal-btn pointer">Ajouter une photo</button>
+		</div>
+
+		<div id="upload" class="modal hidden">
+			<h1>Ajout photo</h1>
+			<div class="content">
+				<div id="upload-container" class="pointer">
+					<input type="file" accept=".png,.jpg,.jpeg" class="hidden" />
+		
+					<div id="filepicker-content">
+						<i class="fa-regular fa-image"></i>
+						<button>+ Ajouter photo</button>
+						<p class="tips">jpg, png : 4mo max</p>
+					</div>
+				</div>
+		
+				<div class="input title">
+					<label for="title">Titre</label>
+					<input type="text" id="title">
+				</div>
+		
+				<div class="input category">
+					<label for="category">Catégorie</label>
+					<select id="category"></select>
+				</div>
+			</div>
+		
+			<div class="separator"></div>
+		
+			<button id="upload-work-btn" class="modal-btn pointer disabled">Valider</button>
 		</div>
 	</div>
 
