@@ -2,10 +2,12 @@ import { loadWorks } from "./index.js"
 import { getCategories, getWorks, addWork, deleteWork } from "./api.js";
 import { addTrackedEvent, removeTrackedEvent } from "./eventTracking.js";
 
+// Modals base class
 export class Modal {
     static openedModals = new Set();
     opener = null;
 
+    // Creates back and close buttons
     init(opener = null) {
         this.opener = opener;
 
@@ -19,6 +21,7 @@ export class Modal {
     onOpen() {}
     onClose() {}
 
+    // Instantiates a modal object, a clickable overlay if it doesn't exist and calls its onOpen() function
     static openModal(modalClass, fromModal = null) {
         const newModal = new modalClass();
         newModal.init(fromModal);
@@ -47,6 +50,7 @@ export class Modal {
         body?.classList.add("noscroll");
     }
 
+    // Calls the modal onClose() function and removes the overlay if no other modal is opened
     static closeModal(modal) {
         const body = document.querySelector("body");
         const modalContainer = document.querySelector("#modal-container");
@@ -65,6 +69,7 @@ export class Modal {
         }
     }
 
+    // Calls closeModal() for each opened modal
     static closeAllModals() {
         const openModalIdsCopy = new Set(Modal.openedModals);
         openModalIdsCopy.forEach(id => {
@@ -72,6 +77,8 @@ export class Modal {
         });
     }
 
+    // Removes existing back button, adds a new one to the modal
+    // and listens for a click on it to open back the previous one
     static createBackButton(currentModal, targetModal) {
         const existingBackButton = document.querySelector("#modal-container .back-btn");
         existingBackButton?.remove();
@@ -90,6 +97,8 @@ export class Modal {
         }
     }
 
+    // Removes existing close button, adds a new one to the modal
+    // and listens for a click on it to close the modal
     static createCloseButton(modal) {
         const modalElement = document.querySelector(`#modal-container #${modal.id}`);
 

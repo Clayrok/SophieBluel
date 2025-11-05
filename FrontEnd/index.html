@@ -14,7 +14,6 @@
 		<link rel="stylesheet" href="./assets/style.css">
 		<script type="module" src="./assets/index.js"></script>
 	</head>
-
 	<body class="flexbox col">
 		<div id="edition-banner" class="flexbox fullw hidden">
 			<i class="fa-solid fa-pen-to-square"></i>Mode édition
@@ -31,7 +30,6 @@
 				</ul>
 			</nav>
 		</header>
-
 		<main>
 			<div id="modal-container" class="flexbox fullw fullh hidden">
 				<div id="gallery" class="modal flexbox col hidden">
@@ -42,37 +40,30 @@
 					<div class="separator"></div>
 					<button id="add-work-btn" class="modal-btn pointer">Ajouter une photo</button>
 				</div>
-			
 				<div id="upload" class="modal flexbox col hidden">
 					<h1>Ajout photo</h1>
 					<div class="content flexbox col fullw">
 						<div id="upload-container" class="pointer fullw">
 							<input type="file" accept=".png,.jpg,.jpeg" class="hidden">
-			
 							<div id="filepicker-content" class="flexbox col fullw fullh">
 								<i class="fa-regular fa-image"></i>
 								<button>+ Ajouter photo</button>
 								<p class="tips">jpg, png : 4mo max</p>
 							</div>
 						</div>
-			
 						<div class="input title flexbox col fullw">
 							<label for="title" class="fullw">Titre</label>
 							<input type="text" id="title">
 						</div>
-			
 						<div class="input category flexbox col fullw">
 							<label for="category" class="fullw">Catégorie</label>
 							<select id="category"></select>
 						</div>
 					</div>
-			
 					<div class="separator"></div>
-			
 					<button id="upload-work-btn" class="modal-btn pointer disabled">Valider</button>
 				</div>
 			</div>
-
 			<section id="introduction" class="flexbox">
 				<h2 class="sr-only">Introduction</h2>
 				<figure>
@@ -85,7 +76,6 @@
 					<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 				</article>
 			</section>
-
 			<section id="portfolio" class="flexbox col">
 				<div id="portfolio-title-container">
 					<h2>Mes Projets</h2>
@@ -97,7 +87,6 @@
 				<div id="filters" class="flexbox fullw"></div>
 				<div class="gallery fullw"></div>
 			</section>
-
 			<section id="contact" class="flexbox col">
 				<h2>Contact</h2>
 				<p>Vous avez un projet ? Discutons-en !</p>
@@ -112,7 +101,6 @@
 				</form>
 			</section>
 		</main>
-
 		<footer>
 			<nav>
 				<ul class="flexbox">

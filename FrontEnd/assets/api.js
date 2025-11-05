@@ -1,6 +1,7 @@
 const apiURL = "http://localhost:5678/api";
 let token = null;
 
+// Retrieves the token from the API and stores it
 export function retrieveToken(emailValue, passwordValue) {
     return fetch(`${apiURL}/users/login`, {
         method: "POST",
@@ -20,6 +21,7 @@ export function retrieveToken(emailValue, passwordValue) {
     });
 }
 
+// Get the stored token
 export function getToken() {
     if (token == null) {
         token = localStorage.getItem("token") || null;
@@ -28,11 +30,13 @@ export function getToken() {
     return token;
 }
 
+// Wipes the stored token
 export function resetToken() {
     localStorage.removeItem("token");
     token = null;
 }
 
+// Retrieves the categories from the API
 export function getCategories() {
     return fetch(`${apiURL}/categories`)
         .then(response => {
@@ -43,6 +47,7 @@ export function getCategories() {
         });
 }
 
+// Retrieves the works from the API
 export function getWorks() {
     return fetch(`${apiURL}/works`)
         .then(response => {
@@ -53,6 +58,7 @@ export function getWorks() {
         });
 }
 
+// Calls the API to add a new work
 export function addWork(image, title, categoryId) {
     const formData = new FormData();
     formData.append("image", image);
@@ -71,6 +77,7 @@ export function addWork(image, title, categoryId) {
     });
 }
 
+// Calls the API to remove a work
 export function deleteWork(workId) {
     return fetch(`${apiURL}/works/${workId}`, {
         method: 'DELETE',

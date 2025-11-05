@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async function (e) {
     initEvents();
 });
 
+// Resets category filters and retrieves categories from the API
 async function loadCategories() {
     resetCategoryFilters();
     getCategories().then(categories => {
@@ -19,6 +20,7 @@ async function loadCategories() {
     });
 }
 
+// Retrieves and appends (addPortfolioWork) all works from the API
 export function loadWorks() {
     getWorks().then(works => {
         const gallery = document.querySelector("#portfolio .gallery");
@@ -30,6 +32,7 @@ export function loadWorks() {
     });
 }
 
+// Appends a new work to the gallery
 function addPortfolioWork(gallery, work) {
     const newWork = document.createElement("figure");
     newWork.classList.add("work");
@@ -49,6 +52,7 @@ function addPortfolioWork(gallery, work) {
     gallery.appendChild(newWork);
 }
 
+// Adds a new filter button
 function addCategoryFilter(category, active = false) {
     const filters = document.querySelector("#filters");
 
@@ -70,6 +74,7 @@ function resetCategoryFilters() {
     filters.innerHTML = "";
 }
 
+// Colors the matching filter button and hides unrelated works
 function setFilter(filterId) {
     const filterButtons = document.querySelectorAll(".filter-button");
     filterButtons.forEach(button => {
@@ -94,6 +99,7 @@ function setFilter(filterId) {
     });
 }
 
+// Adds edit functionalities and decorations
 function initEditMode() {
     if (getToken() != null) {
         const shown = ["#edition-banner", "#logout-btn", "#portfolio-modify"];
