@@ -1,5 +1,5 @@
 import { getToken, resetToken, getCategories, getWorks } from "./api.js"
-import { GalleryModal, UploadModal, openModal, closeModal, closeAllModals } from "./modals.js";
+import { Modal, GalleryModal } from "./modals.js";
 
 document.addEventListener("DOMContentLoaded", async function (e) {
     await getToken();
@@ -37,6 +37,7 @@ function addPortfolioWork(gallery, work) {
     newWork.dataset.categoryId = work.category.id;
 
     const img = document.createElement("img");
+    img.classList.add("fullw");
     img.src = work.imageUrl;
     img.alt = work.title;
     newWork.appendChild(img);
@@ -53,7 +54,7 @@ function addCategoryFilter(category, active = false) {
 
     const newBtn = document.createElement("button");
     newBtn.innerText = category.name;
-    newBtn.classList.add("filter-button");
+    newBtn.classList.add("filter-button", "flexbox");
     if (active) newBtn.classList.add("active");
     newBtn.dataset.filterId = category.id;
 
@@ -121,6 +122,6 @@ function initEvents() {
 
     const worksEditOpenBtn = document.querySelector("#portfolio-modify");
     worksEditOpenBtn?.addEventListener("click", function (e) {
-        openModal(GalleryModal);
+        Modal.openModal(GalleryModal);
     });
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="flexbox col">
 	<head>
 		<meta charset="UTF-8">
 		<title>Sophie Bluel - Architecte d'intérieur</title>
@@ -12,40 +12,42 @@
 		<script type="module" src="./assets/login.js"></script>
 	</head>
 
-	<body>
-		<header>
-			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+	<body class="flexbox col">
+		<header class="flexbox">
+			<h1 class="flexbox col">Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
-				<ul>
-					<a href="index.html"><li>projets</li></a>
-					<a href="index.html#contact"><li>contact</li></a>
+				<ul class="flexbox">
+					<li><a href="index.html">projets</a></li>
+					<li><a href="index.html#contact">contact</a></li>
 					<li class="current">login</li>
 					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 				</ul>
 			</nav>
 		</header>
 
-		<main id="login">
-            <form id="login-form">
-                <h1 class="title">Login</h1>
-
-				<p id="credentials-error" class="hidden">Email ou Mot de passe incorrect.</p>
-
-                <label for="email">E-mail</label>
-                <input type="email" name="email" class="text-input" autocomplete="email">
-
-                <label for="password">Mot de passe</label>
-                <input type="password" name="password" class="text-input">
-
-                <input type="submit" value="Se connecter" id="connect-btn" class="pointer">
-
-                <a href="#" id="password-reset">Mot de passe oublié</a>
-            </form>
+		<main id="login" class="flexbox col fullw fullh">
+			<section>
+				<form id="login-form" class="flexbox col">
+					<h1 class="title">Login</h1>
+				
+					<p id="credentials-error" class="hidden">Email ou Mot de passe incorrect.</p>
+				
+					<label for="email" class="fullw">E-mail</label>
+					<input type="email" name="email" id="email" class="text-input fullw" autocomplete="email">
+				
+					<label for="password" class="fullw">Mot de passe</label>
+					<input type="password" name="password" id="password" class="text-input fullw">
+				
+					<input type="submit" value="Se connecter" id="connect-btn" class="pointer fullw">
+				
+					<a href="#" id="password-reset">Mot de passe oublié</a>
+				</form>
+			</section>
         </main>
 
 		<footer>
 			<nav>
-				<ul>
+				<ul class="flexbox">
 					<li>Mentions Légales</li>
 				</ul>
 			</nav>

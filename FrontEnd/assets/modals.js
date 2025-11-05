@@ -2,24 +2,110 @@ import { loadWorks } from "./index.js"
 import { getCategories, getWorks, addWork, deleteWork } from "./api.js";
 import { addTrackedEvent, removeTrackedEvent } from "./eventTracking.js";
 
-const openedModals = new Set();
-
-
-class Modal {
+export class Modal {
+    static openedModals = new Set();
     opener = null;
 
     init(opener = null) {
         this.opener = opener;
 
         if (this.opener) {
-            createBackButton(this, opener);
+            Modal.createBackButton(this, opener);
         }
         
-        createCloseButton(this);
+        Modal.createCloseButton(this);
     }
     
     onOpen() {}
     onClose() {}
+
+    static openModal(modalClass, fromModal = null) {
+        const newModal = new modalClass();
+        newModal.init(fromModal);
+        if (fromModal) newModal.opener = fromModal;
+
+        const body = document.querySelector("body");
+        const modalContainer = document.querySelector("#modal-container");
+        const modalElement = document.querySelector(`#modal-container .modal#${newModal.id}`);
+
+        let overlay = document.querySelector("#modal-container #modal-overlay");
+        if (overlay == null) {
+            overlay = document.createElement("div");
+            overlay.id = "modal-overlay";
+            overlay.classList.add("flexbox", "fullw", "fullh");
+            overlay.addEventListener("click", function (e) {
+                Modal.closeAllModals();
+            });
+            modalContainer.prepend(overlay);
+        }
+
+        Modal.openedModals.add(newModal);
+        newModal.onOpen();
+
+        modalContainer?.classList.remove("hidden");
+        modalElement?.classList.remove("hidden");
+        body?.classList.add("noscroll");
+    }
+
+    static closeModal(modal) {
+        const body = document.querySelector("body");
+        const modalContainer = document.querySelector("#modal-container");
+        const modalElement = document.querySelector(`.modal#${modal.id}`);
+        modalElement?.classList.add("hidden");
+
+        Modal.openedModals.delete(modal);
+        modal.onClose();
+
+        if (Modal.openedModals.size === 0) {
+            const overlay = document.querySelector("#modal-container #modal-overlay");
+            overlay?.remove();
+
+            modalContainer?.classList.add("hidden");
+            body?.classList.remove("noscroll");
+        }
+    }
+
+    static closeAllModals() {
+        const openModalIdsCopy = new Set(Modal.openedModals);
+        openModalIdsCopy.forEach(id => {
+            Modal.closeModal(id);
+        });
+    }
+
+    static createBackButton(currentModal, targetModal) {
+        const existingBackButton = document.querySelector("#modal-container .back-btn");
+        existingBackButton?.remove();
+
+        const modalContainer = document.querySelector(`.modal#${currentModal.id}`);
+        if (modalContainer) {
+            const backButton = document.createElement("i");
+            backButton.classList.add("fa-solid", "fa-arrow-left", "back-btn", "pointer");
+
+            modalContainer.prepend(backButton);
+
+            backButton?.addEventListener("click", function () {
+                Modal.closeModal(currentModal);
+                Modal.openModal(targetModal);
+            });
+        }
+    }
+
+    static createCloseButton(modal) {
+        const modalElement = document.querySelector(`#modal-container #${modal.id}`);
+
+        const existingCloseButton = document.querySelector("#modal-container .close-btn");
+        existingCloseButton?.remove();
+
+        if (modalElement) {
+            const closeButton = document.createElement("i");
+            closeButton.classList.add("fa-solid", "fa-xmark", "close-btn", "pointer");
+            modalElement.prepend(closeButton);
+
+            closeButton.addEventListener("click", () => {
+                Modal.closeModal(modal);
+            });
+        }
+    }
 }
 
 export class GalleryModal extends Modal {
@@ -33,8 +119,8 @@ export class GalleryModal extends Modal {
 
         removeTrackedEvent(addButton, "click");
         addTrackedEvent(addButton, "click", () => {
-            closeModal(currentModal);
-            openModal(UploadModal, currentModal.constructor);
+            Modal.closeModal(currentModal);
+            Modal.openModal(UploadModal, currentModal.constructor);
         });
 
         this.#loadWorks();
@@ -54,14 +140,14 @@ export class GalleryModal extends Modal {
                 workThumbnail.dataset.workId = work.id;
 
                 const workImg = document.createElement("img");
+                workImg.classList.add("fullw", "fullh");
                 workImg.src = work.imageUrl;
                 workImg.dataset.workId = work.id;
                 workThumbnail.appendChild(workImg);
 
                 const deleteBtn = document.createElement("button");
                 deleteBtn.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
-                deleteBtn.classList.add("work-del");
-                deleteBtn.classList.add("pointer");
+                deleteBtn.classList.add("work-del", "pointer", "flexbox");
                 workThumbnail.appendChild(deleteBtn);
 
                 deleteBtn?.addEventListener("click", function (e) {
@@ -166,9 +252,7 @@ export class UploadModal extends Modal {
 
     onClose() {
         const uploadContainer = document.querySelector(".modal#upload #upload-container");
-        if (uploadContainer) {
-            uploadContainer.style["background-image"] = "none";
-        }
+        if (uploadContainer) uploadContainer.style["background-image"] = "none";
 
         const filePickerContent = document.querySelector(".modal#upload #filepicker-content");
         if (filePickerContent) filePickerContent.classList.remove("hidden");
@@ -178,93 +262,5 @@ export class UploadModal extends Modal {
 
         const categorySelect = document.querySelector(".modal#upload .input select#category");
         if (categorySelect) categorySelect.selectedIndex = 0;
-    }
-}
-
-
-export function openModal(modalClass, fromModal = null) {
-    const newModal = new modalClass();
-    newModal.init(fromModal);
-    if (fromModal) newModal.opener = fromModal;
-
-    const body = document.querySelector("body");
-    const modalContainer = document.querySelector("#modal-container");
-    const modalElement = document.querySelector(`#modal-container .modal#${newModal.id}`);
-
-    let overlay = document.querySelector("#modal-container #modal-overlay");
-    if (overlay == null) {
-        overlay = document.createElement("div");
-        overlay.id = "modal-overlay";
-        overlay.addEventListener("click", function (e) {
-            closeAllModals();
-        });
-        modalContainer.prepend(overlay);
-    }
-
-    openedModals.add(newModal);
-    newModal.onOpen();
-
-    modalContainer?.classList.remove("hidden");
-    modalElement?.classList.remove("hidden");
-    body?.classList.add("noscroll");
-}
-
-export function closeModal(modal) {
-    const body = document.querySelector("body");
-    const modalContainer = document.querySelector("#modal-container");
-    const modalElement = document.querySelector(`.modal#${modal.id}`);
-    modalElement?.classList.add("hidden");
-
-    openedModals.delete(modal);
-    modal.onClose();
-
-    if (openedModals.size === 0) {
-        const overlay = document.querySelector("#modal-container #modal-overlay");
-        overlay?.remove();
-
-        modalContainer?.classList.add("hidden");
-        body?.classList.remove("noscroll");
-    }
-}
-
-export function closeAllModals() {
-    const openModalIdsCopy = new Set(openedModals);
-    openModalIdsCopy.forEach(id => {
-        closeModal(id);
-    });
-}
-
-function createBackButton(currentModal, targetModal) {
-    const existingBackButton = document.querySelector("#modal-container .back-btn");
-    existingBackButton?.remove();
-
-    const modalContainer = document.querySelector(`.modal#${currentModal.id}`);
-    if (modalContainer) {
-        const backButton = document.createElement("i");
-        backButton.classList.add("fa-solid", "fa-arrow-left", "back-btn", "pointer");
-
-        modalContainer.prepend(backButton);
-
-        backButton?.addEventListener("click", function() {
-            closeModal(currentModal);
-            openModal(targetModal);
-        });
-    }
-}
-
-function createCloseButton(modal) {
-    const modalElement = document.querySelector(`#modal-container #${modal.id}`);
-
-    const existingCloseButton = document.querySelector("#modal-container .close-btn");
-    existingCloseButton?.remove();
-
-    if (modalElement) {
-        const closeButton = document.createElement("i");
-        closeButton.classList.add("fa-solid", "fa-xmark", "close-btn", "pointer");
-        modalElement.prepend(closeButton);
-
-        closeButton.addEventListener("click", () => {
-            closeModal(modal);
-        });
     }
 }

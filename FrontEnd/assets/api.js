@@ -1,8 +1,8 @@
-const url = "http://localhost:5678/api";
+const apiURL = "http://localhost:5678/api";
 let token = null;
 
 export function retrieveToken(emailValue, passwordValue) {
-    return fetch(`${url}/users/login`, {
+    return fetch(`${apiURL}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -34,7 +34,7 @@ export function resetToken() {
 }
 
 export function getCategories() {
-    return fetch(`${url}/categories`)
+    return fetch(`${apiURL}/categories`)
         .then(response => {
             return response.json();
         })
@@ -44,7 +44,7 @@ export function getCategories() {
 }
 
 export function getWorks() {
-    return fetch(`${url}/works`)
+    return fetch(`${apiURL}/works`)
         .then(response => {
             return response.json();
         })
@@ -59,7 +59,7 @@ export function addWork(image, title, categoryId) {
     formData.append("title", title);
     formData.append("category", categoryId);
 
-    return fetch(`${url}/works`, {
+    return fetch(`${apiURL}/works`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${getToken()}`
@@ -72,7 +72,7 @@ export function addWork(image, title, categoryId) {
 }
 
 export function deleteWork(workId) {
-    return fetch(`${url}/works/${workId}`, {
+    return fetch(`${apiURL}/works/${workId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${getToken()}`,

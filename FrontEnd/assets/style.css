@@ -1,30 +1,89 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-* {
-	box-sizing: border-box;
-	scroll-behavior: smooth;
-}
-
 :root {
 	--main-color: #1D6154;
 }
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+/* ---- Reset default ---- */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -34,40 +93,42 @@ time, mark, audio, video {
 }
 
 html {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	min-height: 100vh;
 }
 
-html > * {
+html>* {
 	width: 100%;
 }
 
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
 	display: block;
 }
 
-body {
-	display: flex;
-    flex-direction: column;
-    align-items: stretch;
-	line-height: 1;
-	flex: 1;
-}
-
-ol, ul {
+ol,
+ul {
 	list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
 	quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
 	content: '';
 	content: none;
 }
@@ -76,7 +137,28 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-/** end reset css**/
+
+/* ---- General ---- */
+* {
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+.flexbox {
+	display: flex;
+}
+
+.flexbox.col {
+	flex-direction: column;
+}
+
+.fullw {
+	width: 100%;
+}
+
+.fullh {
+	height: 100%;
+}
 
 .hidden {
 	display: none !important;
@@ -98,16 +180,11 @@ table {
 input:not(input[type="submit"]),
 textarea,
 select {
-	width: 100%;
 	padding-left: 20px;
 	padding-right: 20px;
 	border: none;
 	box-shadow: 0px 4px 14px 0px #00000017;
 	font-size: 1.2em;
-}
-
-label {
-	width: 100%;
 }
 
 input:not(input[type="submit"]),
@@ -130,21 +207,79 @@ input[type="submit"] {
 }
 
 body {
+	align-items: stretch;
+	line-height: 1;
+	flex: 1;
 	max-width: 1140px;
-	font-family: 'Work Sans' ;
+	font-family: 'Work Sans';
 	font-size: 14px;
 	background: #FFFEF8;
 }
 
+header {
+	justify-content: space-between;
+	margin: 50px 0
+}
+
+section {
+	margin: 50px 0
+}
+
+h1 {
+	font-family: 'Syne';
+	font-size: 22px;
+	font-weight: 800;
+	color: #B1663C
+}
+
+h1>span {
+	font-family: 'Work Sans';
+	font-size: 10px;
+	letter-spacing: 0.1em;
+}
+
+h2 {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 30px;
+	color: var(--main-color);
+}
+
+nav a {
+	text-decoration: none;
+	color: #3D3D3D;
+}
+
+nav ul {
+	align-items: center;
+	list-style-type: none;
+}
+
+nav li {
+	padding: 0 10px;
+	font-size: 1.2em;
+}
+
+nav li.current {
+	font-weight: 600;
+}
+
+li:not(.current) {
+	cursor: pointer;
+}
+
+li:not(.current):hover {
+	color: #B1663C;
+}
+
+/* ---- Homepage ---- */
 #edition-banner {
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 12px;
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
 	height: 60px;
 	background: black;
 	color: white;
@@ -159,14 +294,11 @@ body {
 /* Modals */
 #modal-container,
 #modal-container > #modal-overlay {
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 100%;
 	z-index: 99;
 }
 
@@ -175,8 +307,6 @@ body {
 }
 
 #modal-container .modal {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	position: relative;
 	width: 630px;
@@ -211,15 +341,12 @@ body {
 }
 
 #modal-container .content {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
 	gap: 35px;
 	flex: 1;
 	overflow-y: auto;
 	overflow-x: hidden;
-	width: 100%;
 	padding-left: 100px;
 	padding-right: 100px;
 	margin-bottom: 35px;
@@ -257,13 +384,10 @@ body {
 }
 
 .modal#gallery .work img {
-	width: 100%;
-	height: 100%;
 	object-fit: cover;
 }
 
 .modal#gallery .work-del {
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	position: absolute;
@@ -286,7 +410,6 @@ body {
 .modal#upload #upload-container  {
 	position: relative;
 	flex: 1;
-	width: 100%;
 	max-height: 170px;
 	padding: 20px;
 	background: #E8F1F6;
@@ -301,12 +424,8 @@ body {
 }
 
 .modal#upload #upload-container #filepicker-content {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	gap: 10px;
-	width: 100%;
-	height: 100%;
 }
 
 .modal#upload #upload-container i {
@@ -334,83 +453,14 @@ body {
 }
 
 .modal#upload .input {
-	display: flex;
-	flex-direction: column;
 	gap: 10px;
-	width: 100%;
 	font-family: "Work Sans";
 	font-size: 14px;
 	font-weight: 500;
 }
 
-.modal#upload input {
-	width: 100%;
-}
-
-/* General */
-header {
-	display: flex;
-	justify-content: space-between;
-	margin: 50px 0
-}
-
-section {
-	margin: 50px 0
-}
-
-h1{
-	display: flex;
-	flex-direction: column;
-	font-family: 'Syne';
-	font-size: 22px;
-	font-weight: 800;
-	color: #B1663C
-}
-
-h1 > span {
-	font-family: 'Work Sans';
-	font-size:10px;
-	letter-spacing: 0.1em;
-}
-
-h2{
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 30px;
-	color: var(--main-color);
-}
-
-nav a {
-	text-decoration: none;
-	color: #3D3D3D;
-}
-
-nav ul {
-	display: flex;
-	align-items: center;
-	list-style-type: none;
-
-}
-
-nav li {
-	padding: 0 10px;
-	font-size: 1.2em;
-}
-
-nav li.current {
-	font-weight: 600;
-}
-
-li:not(.current) {
-	cursor: pointer;
-}
-
-li:not(.current):hover {
-	color: #B1663C;
-}
-
+/* ---- Introduction ---- */
 #introduction {
-	display: flex;
 	align-items: center;
 	margin-bottom: 120px;
 }
@@ -437,16 +487,14 @@ li:not(.current):hover {
 	margin-bottom: 0.5em;
 }
 
+/* ---- Filters ---- */
 #filters {
-	display: flex;
 	justify-content: center;
 	gap: 10px;
-	width: 100%;
 	margin-bottom: 30px;
 }
 
 #filters .filter-button {
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 37px;
@@ -472,9 +520,8 @@ li:not(.current):hover {
 	background: var(--main-color);
 }
 
+/* ---- Portfolio ---- */
 #portfolio {
-	display: flex;
-	flex-direction: column;
 	align-items: center
 }
 
@@ -496,7 +543,6 @@ li:not(.current):hover {
 }
 
 .gallery {
-	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
@@ -504,14 +550,12 @@ li:not(.current):hover {
 }
 
 .gallery img {
-	width: 100%;
 	aspect-ratio: 3 / 4;
 	object-fit: cover;
 }
 
+/* ---- Contact form ---- */
 #contact {
-	display: flex;
-    flex-direction: column;
     align-items: center;
 	width: 50%;
 	margin: auto;
@@ -522,8 +566,6 @@ li:not(.current):hover {
 }
 
 #contact form {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 	text-align: left;
 	margin-top:30px;
@@ -539,8 +581,8 @@ li:not(.current):hover {
 	margin: 2em 0 1em 0;
 }
 
+/* ---- Footer ---- */
 footer nav ul {
-	display: flex;
 	justify-content: flex-end;
 	margin: 2em
 }
@@ -548,19 +590,13 @@ footer nav ul {
 
 /***** Login *****/
 #login {
-	display: flex;
-	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
 	flex: 1;
-	width: 100%;
-	height: 100%;
 	padding-top: 80px;
 }
 
 #login-form {
-	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	width: 380px;
