@@ -119,15 +119,14 @@ function initEditMode() {
 }
 
 function initEvents() {
-    const logoutBtn = document.querySelector("#logout-btn");
-    logoutBtn?.addEventListener("click", function (e) {
-        localStorage.removeItem("token");
-        resetToken();
-        window.location = "index.html";
-    });
-
-    const worksEditOpenBtn = document.querySelector("#portfolio-modify");
-    worksEditOpenBtn?.addEventListener("click", function (e) {
-        Modal.openModal(GalleryModal);
+    document.addEventListener("click", function (e) {
+        if (e.target.id == "logout-btn") {
+            localStorage.removeItem("token");
+            resetToken();
+            window.location = "index.html";
+        }
+        else if (e.target.id == "portfolio-modify") {
+            Modal.openModal(GalleryModal);
+        }
     });
 }

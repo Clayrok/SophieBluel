@@ -289,22 +289,22 @@ li:not(.current):hover {
 }
 
 /* Gallery modal */
-.modal#gallery .gallery {
+.modal .gallery {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	gap: 10px;
 }
 
-.modal#gallery .work {
+.modal .work {
 	position: relative;
 	aspect-ratio: 3 / 4;
 }
 
-.modal#gallery .work img {
+.modal .work img {
 	object-fit: cover;
 }
 
-.modal#gallery .work-del {
+.modal .work-del {
 	justify-content: center;
 	align-items: center;
 	position: absolute;
@@ -319,12 +319,12 @@ li:not(.current):hover {
 	border-radius: 2px;
 }
 
-.modal#gallery .work-del i {
+.modal .work-del i {
 	pointer-events: none;
 }
 
 /* Upload modal */
-.modal#upload #upload-container  {
+.modal #upload-container  {
 	position: relative;
 	flex: 1;
 	max-height: 170px;
@@ -336,22 +336,22 @@ li:not(.current):hover {
 	border-radius: 3px;
 }
 
-.modal#upload #upload-container * {
+.modal #upload-container * {
 	pointer-events: none;
 }
 
-.modal#upload #upload-container #filepicker-content {
+.modal #upload-container #filepicker-content {
 	align-items: center;
 	gap: 10px;
 }
 
-.modal#upload #upload-container i {
+.modal #upload-container i {
 	flex: 1;
 	font-size: 70px;
 	color: #b9c5cc;
 }
 
-.modal#upload #upload-container button {
+.modal #upload-container button {
 	width: 174px;
 	color: #306685;
 	font-family: "Work Sans";
@@ -363,13 +363,13 @@ li:not(.current):hover {
 	padding: 10px;
 }
 
-.modal#upload #upload-container .tips {
+.modal #upload-container .tips {
 	font-family: "Work Sans";
 	font-size: 10px;
 	font-weight: 400;
 }
 
-.modal#upload .input {
+.modal .input {
 	gap: 10px;
 	font-family: "Work Sans";
 	font-size: 14px;
@@ -439,17 +439,14 @@ li:not(.current):hover {
 
 /* ---- Portfolio ---- */
 #portfolio {
+	position: relative;
 	align-items: center
 }
 
-#portfolio-title-container {
-	position: relative;
-}
-
-#portfolio-title-container #portfolio-modify {
+#portfolio-modify {
 	position: absolute;
-    right: -110px;
-    top: 8px;
+	transform: translateX(170px);
+	top: 10px;
 	color: #3D3D3D;
 }
 
@@ -532,7 +529,9 @@ footer nav ul {
 }
 
 #login-form #credentials-error {
-	background: #ffefef;
+	position: absolute;
+	bottom: 0;
+	background: #ffe0e0;
 	padding: 5px;
 	border-radius: 5px;
 	border: solid 1px #ffdede;

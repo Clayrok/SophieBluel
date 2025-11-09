@@ -1,72 +1,121 @@
 import { loadWorks } from "./index.js"
+import { loadTemplate } from "./template.js"
 import { getCategories, getWorks, addWork, deleteWork } from "./api.js";
 import { addTrackedEvent, removeTrackedEvent } from "./eventTracking.js";
 
 // Modals base class
 export class Modal {
     static openedModals = new Set();
-    opener = null;
+    static templatePathBase = "./assets/templates/modals/";
+    static closeOverlayTimeout = null;
 
-    // Creates back and close buttons
-    init(opener = null) {
-        this.opener = opener;
+    templateFileName = "";
 
-        if (this.opener) {
-            Modal.createBackButton(this, opener);
-        }
-        
-        Modal.createCloseButton(this);
-    }
+    backTargetModal = null;
+    element = null;
+
+    title = "Titre";
+    validateBtnText = "Valider";
+
+    validateBtnFunction = null;
     
+    init() {
+        const thisModal = this;
+
+        const backBtn = this.element.querySelector(".back-btn");
+        if (this.backTargetModal != null) {
+            backBtn.classList.remove("hidden");
+            backBtn.addEventListener("click", function (e) {
+                Modal.openModal(thisModal.backTargetModal.constructor).then(() => {
+                    Modal.closeModal(thisModal);
+                });
+            });
+        }
+        else {
+            backBtn.classList.add("hidden");
+        }
+
+        const closeBtn = this.element.querySelector(".close-btn");
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function (e) {
+                Modal.closeModal(thisModal);
+            });
+        }
+
+        if (thisModal.validateBtnFunction != null) {
+            const validateBtn = this.element.querySelector(".modal-btn");
+            validateBtn.addEventListener("click", function (e) {
+                thisModal.validateBtnFunction();
+            });
+        }
+    }
+
     onOpen() {}
     onClose() {}
 
     // Instantiates a modal object, a clickable overlay if it doesn't exist and calls its onOpen() function
     static openModal(modalClass, fromModal = null) {
+        clearTimeout(Modal.closeOverlayTimeout);
+        Modal.closeOverlayTimeout = null;
+
         const newModal = new modalClass();
-        newModal.init(fromModal);
-        if (fromModal) newModal.opener = fromModal;
+        if (fromModal) newModal.backTargetModal = fromModal;
 
-        const body = document.querySelector("body");
-        const modalContainer = document.querySelector("#modal-container");
-        const modalElement = document.querySelector(`#modal-container .modal#${newModal.id}`);
+        return loadTemplate(`${Modal.templatePathBase}modal.html`).then(baseModalHtml => {
+            loadTemplate(`${Modal.templatePathBase}${newModal.templateFileName}.html`).then(loadedModalHtml => {
+                const modalContainer = document.querySelector("#modal-container");
+                modalContainer.innerHTML = baseModalHtml;
+                modalContainer.querySelector("#modal-container .content").innerHTML = loadedModalHtml;
 
-        let overlay = document.querySelector("#modal-container #modal-overlay");
-        if (overlay == null) {
-            overlay = document.createElement("div");
-            overlay.id = "modal-overlay";
-            overlay.classList.add("flexbox", "fullw", "fullh");
-            overlay.addEventListener("click", function (e) {
-                Modal.closeAllModals();
+                modalContainer.querySelector("#modal-container .modal h1").innerText = newModal.title;
+                modalContainer.querySelector("#modal-container .modal .modal-btn").innerText = newModal.validateBtnText;
+
+                newModal.element = modalContainer.querySelector("#modal-container .modal");
+
+                let overlay = document.querySelector("#modal-container #modal-overlay");
+                if (overlay == null) {
+                    overlay = document.createElement("div");
+                    overlay.id = "modal-overlay";
+                    overlay.classList.add("flexbox", "fullw", "fullh");
+                    overlay.addEventListener("click", function (e) {
+                        Modal.closeAllModals();
+                    });
+                    modalContainer.prepend(overlay);
+                }
+
+                newModal.init(fromModal);
+
+                Modal.openedModals.add(newModal);
+                newModal.onOpen();
+
+                const body = document.querySelector("body");
+                body?.classList.add("noscroll");
+
+                modalContainer.classList.remove("hidden");
             });
-            modalContainer.prepend(overlay);
-        }
-
-        Modal.openedModals.add(newModal);
-        newModal.onOpen();
-
-        modalContainer?.classList.remove("hidden");
-        modalElement?.classList.remove("hidden");
-        body?.classList.add("noscroll");
+        });
     }
 
     // Calls the modal onClose() function and removes the overlay if no other modal is opened
     static closeModal(modal) {
         const body = document.querySelector("body");
         const modalContainer = document.querySelector("#modal-container");
-        const modalElement = document.querySelector(`.modal#${modal.id}`);
-        modalElement?.classList.add("hidden");
 
         Modal.openedModals.delete(modal);
-        modal.onClose();
 
-        if (Modal.openedModals.size === 0) {
-            const overlay = document.querySelector("#modal-container #modal-overlay");
-            overlay?.remove();
+        clearTimeout(Modal.closeOverlayTimeout);
+        Modal.closeOverlayTimeout = setTimeout(() => {
+            modal.element.remove();
+            modal.onClose();
 
-            modalContainer?.classList.add("hidden");
-            body?.classList.remove("noscroll");
-        }
+            if (Modal.openedModals.size === 0) {
+                const overlay = document.querySelector("#modal-container #modal-overlay");
+                overlay?.remove();
+
+                modalContainer?.classList.add("hidden");
+                body?.classList.remove("noscroll");
+            }
+        }, 50);
     }
 
     // Calls closeModal() for each opened modal
@@ -76,72 +125,26 @@ export class Modal {
             Modal.closeModal(id);
         });
     }
-
-    // Removes existing back button, adds a new one to the modal
-    // and listens for a click on it to open back the previous one
-    static createBackButton(currentModal, targetModal) {
-        const existingBackButton = document.querySelector("#modal-container .back-btn");
-        existingBackButton?.remove();
-
-        const modalContainer = document.querySelector(`.modal#${currentModal.id}`);
-        if (modalContainer) {
-            const backButton = document.createElement("i");
-            backButton.classList.add("fa-solid", "fa-arrow-left", "back-btn", "pointer");
-
-            modalContainer.prepend(backButton);
-
-            backButton?.addEventListener("click", function () {
-                Modal.closeModal(currentModal);
-                Modal.openModal(targetModal);
-            });
-        }
-    }
-
-    // Removes existing close button, adds a new one to the modal
-    // and listens for a click on it to close the modal
-    static createCloseButton(modal) {
-        const modalElement = document.querySelector(`#modal-container #${modal.id}`);
-
-        const existingCloseButton = document.querySelector("#modal-container .close-btn");
-        existingCloseButton?.remove();
-
-        if (modalElement) {
-            const closeButton = document.createElement("i");
-            closeButton.classList.add("fa-solid", "fa-xmark", "close-btn", "pointer");
-            modalElement.prepend(closeButton);
-
-            closeButton.addEventListener("click", () => {
-                Modal.closeModal(modal);
-            });
-        }
-    }
 }
 
 export class GalleryModal extends Modal {
     id = "gallery";
+    templateFileName = "gallery-modal";
+
+    title = "Galerie photo";
+    validateBtnText = "Ajouter une photo";
+
+    validateBtnFunction = this.#openUpload;
 
     init() {
         super.init();
-
-        const currentModal = this;
-        const addButton = document.querySelector(".modal#gallery #add-work-btn");
-
-        removeTrackedEvent(addButton, "click");
-        addTrackedEvent(addButton, "click", () => {
-            Modal.closeModal(currentModal);
-            Modal.openModal(UploadModal, currentModal.constructor);
-        });
-
         this.#loadWorks();
-    }
-
-    onClose() {
-
     }
 
     #loadWorks() {
         getWorks().then(works => {
-            const gallery = document.querySelector(".modal#gallery .gallery");
+            const modal = this.element;
+            const gallery = modal.querySelector(".gallery");
             if (gallery) gallery.innerHTML = "";
             works.forEach(work => {
                 const workThumbnail = document.createElement("div");
@@ -165,7 +168,7 @@ export class GalleryModal extends Modal {
 
                     deleteWork(work.id).then(() => {
                         const portfolioGalleryWork = document.querySelector(`#portfolio .gallery .work[data-work-id="${work.id}"]`);
-                        const editGalleryWork = document.querySelector(`.modal#gallery .gallery .work[data-work-id="${work.id}"]`);
+                        const editGalleryWork = modal.querySelector(`.gallery .work[data-work-id="${work.id}"]`);
                         portfolioGalleryWork?.remove();
                         editGalleryWork?.remove();
                     });
@@ -175,18 +178,27 @@ export class GalleryModal extends Modal {
             });
         });
     }
+
+    #openUpload() {
+        Modal.closeModal(this);
+        Modal.openModal(UploadModal, this);
+    }
 }
 
 export class UploadModal extends Modal {
     id = "upload";
+    templateFileName = "upload-modal";
+
+    title = "Ajout photo";
+    validateBtnText = "Valider";
 
     onOpen() {
-        const filePicker = document.querySelector(`.modal#upload #upload-container`);
-        const filePickerContent = document.querySelector(`.modal#upload #filepicker-content`);
-        const fileInput = document.querySelector(`.modal#upload input[type='file']`);
-        const titleInput = document.querySelector(`.modal#upload .input #title`);
-        const categorySelect = document.querySelector(`.modal#upload .input #category`);
-        const validateBtn = document.querySelector(`.modal#upload #upload-work-btn`);
+        const filePicker = this.element.querySelector(`#upload-container`);
+        const filePickerContent = this.element.querySelector(`#filepicker-content`);
+        const fileInput = this.element.querySelector(`input[type='file']`);
+        const titleInput = this.element.querySelector(`.input #title`);
+        const categorySelect = this.element.querySelector(`.input #category`);
+        const validateBtn = this.element.querySelector(`.modal-btn`);
 
         categorySelect.innerHTML = "";
         getCategories().then(categories => {
@@ -215,6 +227,8 @@ export class UploadModal extends Modal {
         }
 
         if (validateBtn) {
+            updateValidateButton();
+
             removeTrackedEvent(validateBtn, "click");
             addTrackedEvent(validateBtn, "click", onValidateButtonClicked);
         }
@@ -251,7 +265,7 @@ export class UploadModal extends Modal {
             const category = categorySelect.value;
             if (img && inputTitle && category) {
                 addWork(img, inputTitle, category).then(() => {
-                    const backButton = document.querySelector(".modal#upload .back-btn");
+                    const backButton = document.querySelector(".modal .back-btn");
                     backButton?.click();
                     loadWorks();
                 });
