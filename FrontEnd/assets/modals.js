@@ -17,7 +17,7 @@ export class Modal {
     title = "Titre";
     validateBtnText = "Valider";
 
-    validateBtnFunction = null;
+    validateBtnFunction = this.onValidateButtonClicked;
     
     init() {
         const thisModal = this;
@@ -52,6 +52,7 @@ export class Modal {
 
     onOpen() {}
     onClose() {}
+    onValidateButtonClicked() {}
 
     // Instantiates a modal object, a clickable overlay if it doesn't exist and calls its onOpen() function
     static openModal(modalClass, fromModal = null) {
@@ -134,8 +135,6 @@ export class GalleryModal extends Modal {
     title = "Galerie photo";
     validateBtnText = "Ajouter une photo";
 
-    validateBtnFunction = this.#openUpload;
-
     init() {
         super.init();
         this.#loadWorks();
@@ -179,7 +178,7 @@ export class GalleryModal extends Modal {
         });
     }
 
-    #openUpload() {
+    onValidateButtonClicked() {
         Modal.closeModal(this);
         Modal.openModal(UploadModal, this);
     }
@@ -194,8 +193,8 @@ export class UploadModal extends Modal {
 
     onOpen() {
         const filePicker = this.element.querySelector(`#upload-container`);
-        const filePickerContent = this.element.querySelector(`#filepicker-content`);
         const fileInput = this.element.querySelector(`input[type='file']`);
+        const filePickerContent = this.element.querySelector(`#filepicker-content`);
         const titleInput = this.element.querySelector(`.input #title`);
         const categorySelect = this.element.querySelector(`.input #category`);
         const validateBtn = this.element.querySelector(`.modal-btn`);
@@ -228,9 +227,6 @@ export class UploadModal extends Modal {
 
         if (validateBtn) {
             updateValidateButton();
-
-            removeTrackedEvent(validateBtn, "click");
-            addTrackedEvent(validateBtn, "click", onValidateButtonClicked);
         }
 
         function updateValidateButton() {
@@ -258,19 +254,6 @@ export class UploadModal extends Modal {
                 updateValidateButton();
             }
         }
-
-        function onValidateButtonClicked() {
-            const img = fileInput.files[0];
-            const inputTitle = titleInput.value;
-            const category = categorySelect.value;
-            if (img && inputTitle && category) {
-                addWork(img, inputTitle, category).then(() => {
-                    const backButton = document.querySelector(".modal .back-btn");
-                    backButton?.click();
-                    loadWorks();
-                });
-            }
-        }
     }
 
     onClose() {
@@ -285,5 +268,22 @@ export class UploadModal extends Modal {
 
         const categorySelect = document.querySelector(".modal#upload .input select#category");
         if (categorySelect) categorySelect.selectedIndex = 0;
+    }
+
+    onValidateButtonClicked() {
+        const fileInput = this.element.querySelector(`input[type='file']`);
+        const titleInput = this.element.querySelector(`.input #title`);
+        const categorySelect = this.element.querySelector(`.input #category`);
+
+        const img = fileInput.files[0];
+        const inputTitle = titleInput.value;
+        const category = categorySelect.value;
+        if (img && inputTitle && category) {
+            addWork(img, inputTitle, category).then(() => {
+                const backButton = document.querySelector(".modal .back-btn");
+                backButton?.click();
+                loadWorks();
+            });
+        }
     }
 }
