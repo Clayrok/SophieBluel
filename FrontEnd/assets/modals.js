@@ -249,9 +249,17 @@ export class UploadModal extends Modal {
 
             const file = event.target.files[0];
             if (filePicker && file) {
-                filePicker.style["background-image"] = `url("${URL.createObjectURL(file)}")`;
-                filePickerContent?.classList.add("hidden");
-                updateValidateButton();
+                if (!file.type === "image/jpeg" && !file.type === "image/png") {
+                    alert("Format de fichier inconnu. Veuillez sélectionner une image parmis les formats suivants : jpg, jpeg, png.");
+                }
+                else if (file.size > 4000000) {
+                    alert("Ce fichier est trop volumineux. Veuillez sélectionner un fichier de 4 Mo ou moins.");
+                }
+                else {
+                    filePicker.style["background-image"] = `url("${URL.createObjectURL(file)}")`;
+                    filePickerContent?.classList.add("hidden");
+                    updateValidateButton();
+                }
             }
         }
     }
