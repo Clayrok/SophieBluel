@@ -61,6 +61,10 @@ table {
 	scroll-behavior: smooth;
 }
 
+.edit-banner-padded {
+	padding-top: 60px;
+}
+
 .flexbox {
 	display: flex;
 }

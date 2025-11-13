@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", async function (e) {
 
 // Resets category filters and retrieves categories from the API
 async function loadCategories() {
+    if (getToken() != null) return;
+
     resetCategoryFilters();
     getCategories().then(categories => {
         categories.unshift({ id: 0, name: "Tous" });
@@ -105,8 +107,7 @@ function initEditMode() {
         const shown = ["#edition-banner", "#logout-btn", "#portfolio-modify"];
         const hidden = ["#login-btn"];
         
-        const body = document.querySelector("body");
-        if (body) body.style["padding-top"] = "60px";
+        document.querySelector("body")?.classList.add("edit-banner-padded");
 
         shown.forEach(element => {
             document.querySelector(element)?.classList.remove("hidden");
