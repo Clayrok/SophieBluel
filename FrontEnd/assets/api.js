@@ -22,7 +22,7 @@ export function retrieveToken(emailValue, passwordValue) {
 }
 
 // Get the stored token
-export function getToken() {
+export function getStoredToken() {
     if (token == null) {
         token = localStorage.getItem("token") || null;
     }
@@ -60,7 +60,7 @@ export function getWorks() {
 
 // Calls the API to add a new work
 export function addWork(image, title, categoryId) {
-    if (getToken() == null) return;
+    if (getStoredToken() == null) return;
 
     const formData = new FormData();
     formData.append("image", image);
@@ -70,7 +70,7 @@ export function addWork(image, title, categoryId) {
     return fetch(`${apiURL}/works`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${getToken()}`
+            "Authorization": `Bearer ${getStoredToken()}`
         },
         body: formData
     })
@@ -81,12 +81,12 @@ export function addWork(image, title, categoryId) {
 
 // Calls the API to remove a work
 export function deleteWork(workId) {
-    if (getToken() == null) return;
-    
+    if (getStoredToken() == null) return;
+
     return fetch(`${apiURL}/works/${workId}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${getToken()}`,
+            'Authorization': `Bearer ${getStoredToken()}`,
             'Content-Type': 'application/json'
         }
     });

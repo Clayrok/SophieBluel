@@ -1,8 +1,8 @@
-import { getToken, resetToken, getCategories, getWorks } from "./api.js"
+import { getStoredToken, resetToken, getCategories, getWorks } from "./api.js"
 import { Modal, GalleryModal } from "./modals.js";
 
 document.addEventListener("DOMContentLoaded", async function (e) {
-    await getToken();
+    await getStoredToken();
     loadCategories();
     loadWorks();
     initEditMode();
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function (e) {
 
 // Resets category filters and retrieves categories from the API
 async function loadCategories() {
-    if (getToken() != null) return;
+    if (getStoredToken() != null) return;
 
     resetCategoryFilters();
     getCategories().then(categories => {
@@ -103,7 +103,7 @@ function setFilter(filterId) {
 
 // Adds edit functionalities and decorations
 function initEditMode() {
-    if (getToken() != null) {
+    if (getStoredToken() != null) {
         const shown = ["#edition-banner", "#logout-btn", "#portfolio-modify"];
         const hidden = ["#login-btn"];
         
