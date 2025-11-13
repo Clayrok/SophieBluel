@@ -60,6 +60,8 @@ export function getWorks() {
 
 // Calls the API to add a new work
 export function addWork(image, title, categoryId) {
+    if (getToken() == null) return;
+
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", title);
@@ -79,6 +81,8 @@ export function addWork(image, title, categoryId) {
 
 // Calls the API to remove a work
 export function deleteWork(workId) {
+    if (getToken() == null) return;
+    
     return fetch(`${apiURL}/works/${workId}`, {
         method: 'DELETE',
         headers: {
