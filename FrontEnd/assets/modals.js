@@ -249,7 +249,7 @@ export class UploadModal extends Modal {
 
             const file = event.target.files[0];
             if (filePicker && file) {
-                if (!file.type === "image/jpeg" && !file.type === "image/png") {
+                if (file.type !== "image/jpeg" && file.type !== "image/png") {
                     alert("Format de fichier inconnu. Veuillez sélectionner une image parmis les formats suivants : jpg, jpeg, png.");
                 }
                 else if (file.size > 4000000) {
@@ -288,8 +288,8 @@ export class UploadModal extends Modal {
         const category = categorySelect.value;
         if (img && inputTitle && category) {
             addWork(img, inputTitle, category).then(() => {
-                const backButton = document.querySelector(".modal .back-btn");
-                backButton?.click();
+                const closeButton = document.querySelector(".modal .close-btn");
+                closeButton?.click();
                 loadWorks();
             });
         }
